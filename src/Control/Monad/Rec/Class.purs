@@ -112,8 +112,7 @@ instance monadRecEither :: MonadRec (Either e) where
 
 tailRecEff :: forall a b eff. (a -> Eff eff (Step a b)) -> a -> Eff eff b
 tailRecEff f a = runST do
-  e <- f' a
-  r <- newSTRef e
+  r <- newSTRef =<< f' a
   untilE do
     e' <- readSTRef r
     case e' of
