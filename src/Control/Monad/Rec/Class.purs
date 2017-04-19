@@ -116,10 +116,7 @@ tailRecEff f a = runST do
   untilE do
     e' <- readSTRef r
     case e' of
-      Loop a' -> do
-        e'' <- f' a'
-        _ <- writeSTRef r e''
-        pure false
+      Loop a' -> (writeSTRef r =<< f' a') $> false
       Done b -> pure true
   fromDone <$> readSTRef r
   where
